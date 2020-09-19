@@ -1,0 +1,105 @@
+﻿@model LibrarySystem.Models.Book
+
+@{
+    ViewBag.Title = "InsertBook";
+}
+
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+
+
+<h2>新增書籍</h2>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.book_Name, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.book_Name, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.book_Name, "", new { @class = "text-danger", id = "book_name" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.book_Author, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.book_Author, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.book_Author, "", new { @class = "text-danger",id="book_author" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.book_Publisher, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.book_Publisher, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.book_Publisher, "", new { @class = "text-danger",id = "book_publisher" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.book_Content, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextAreaFor(model => model.book_Content, new { @class = "form-control", style = "font-size: medium; font-weight: bold; width:600px" })
+                @Html.ValidationMessageFor(model => model.book_Content, "", new { @class = "text-danger", id = "book_content" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.book_BoughtDate, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.book_BoughtDate, new { @class = "form-control", @type = "Date" })
+                @Html.ValidationMessageFor(model => model.book_BoughtDate, "", new { @class = "text-danger", id = "book_boughtDate" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.book_TypeId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.book_TypeId, (List<SelectListItem>)ViewBag.bookClassData, "請選擇", new { @class = "form-control", id = "type_Id" })
+
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="新增" class="btn btn-default" id="insertButton" />
+                <span style="color:red;font-weight:bold;font-size:18px">@TempData["insertSuccessfully"]</span>
+            </div>
+        </div>
+        <div>
+            @Html.ActionLink("返回搜尋頁面", "SearchBook", "Book")
+        </div>
+    </div>}
+
+<script>
+    $(document).ready(function () {
+        $("#insertButton").click(function (e) {
+
+            if ($("#type_Id").val() == '') {
+                alert("尚有資料未填寫")
+            } else {
+                if (confirm("是否確定新增?")) {
+                    alert("新增成功將會清空欄位，以便繼續新增下一筆，謝謝您!")
+                }
+            }
+
+            
+
+        });
+
+    });
+</script>
+
+
+

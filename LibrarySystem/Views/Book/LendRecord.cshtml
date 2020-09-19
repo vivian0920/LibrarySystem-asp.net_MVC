@@ -1,0 +1,45 @@
+﻿@model LibrarySystem.Models.Book
+
+@{
+    ViewBag.Title = "LendRecord";
+}
+
+<h2>書籍借閱資料</h2>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr id>
+                <th>借閱日期</th>
+                <th>借閱人員編號</th>
+                <th>英文姓名</th>
+                <th>中文姓名</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in (List<LibrarySystem.Models.Book>)ViewBag.recordData)
+            {
+
+
+                <tr id='@item.book_Id'>
+                    <td>@item.book_Lend_date</td>
+                    <td>@item.book_Borrower</td>
+                    <td>@item.book_Borrower_Ename</td>
+                    <td>@item.book_Borrower_Cname</td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+
+
+
+}
+
+<div>
+    @Html.ActionLink("返回搜尋頁面", "SearchBook", "Book")
+</div>
+

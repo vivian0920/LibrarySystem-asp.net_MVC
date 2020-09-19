@@ -1,0 +1,161 @@
+﻿@model LibrarySystem.Models.Book
+
+@{
+    ViewBag.Title = "UpdateBook";
+}
+
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+<h2>修改書籍資訊</h2>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.book_Name, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.book_Name, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.book_Name, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.book_Author, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.book_Author, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.book_Author, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.book_Publisher, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.book_Publisher, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.book_Publisher, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.book_Content, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextAreaFor(model => model.book_Content, new { htmlAttributes = new { @class = "form-control", style = "font-size: medium; font-weight: bold; width:600px" } })
+                @Html.ValidationMessageFor(model => model.book_Content, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.book_BoughtDate, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.book_BoughtDate, "{0:yyyy-MM-dd}", new { @class = "form-control", @type = "Date" })
+                @Html.ValidationMessageFor(model => model.book_BoughtDate, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.book_TypeId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.book_TypeId, (List<SelectListItem>)ViewBag.bookClassData, "請選擇", new { @class = "form-control", id = "type_Id" })
+
+            </div>
+        </div>
+
+
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.book_Status, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.book_Status, (List<SelectListItem>)ViewBag.statusData, "請選擇", new { @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.book_Borrower, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.book_Borrower, (List<SelectListItem>)ViewBag.borrowerData, "", new { @class = "form-control" })
+                @Html.HiddenFor(model => model.book_Borrower)
+
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="儲存" class="btn btn-default" id="modifyButton" />
+                @Html.ActionLink("刪除", "DeleteBook", "Book", new { @class = "btn btn-default", id = "btn_delete", @style = (@Model.book_Status == "B" || @Model.book_Status == "C" ? "display:none" : "") })
+                <span style="color:red;font-weight:bold;font-size:18px">@TempData["updateSuccessfully"]</span>
+            </div>
+
+
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("返回搜尋頁面", "SearchBook", "Book")
+</div>
+
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script>
+   $(document).ready(function(){
+       if ($("#book_Status").val() == 'A' || $("#book_Status").val() == 'U') {
+           $("#book_Borrower").attr("disabled", true);
+           $("#book_Borrower").val("");
+           
+       } else {
+           $("#book_Borrower").attr("disabled", false);
+           
+       }
+
+       $("#book_Status").change(function () {
+        // $('#borrower').attr('disabled',true);
+        if($(this).val()=='A' || $(this).val()=='U'){
+            $("#book_Borrower").attr("disabled",true);
+            $("#book_Borrower").val("");
+            $("#btn_delete").attr("disabled", false);
+        }else{
+            $("#book_Borrower").attr("disabled", false);
+            $("#btn_delete").attr("disabled",true);
+        }
+        });
+   });
+    $("#modifyButton").click(function (e) {
+        if ($("#book_Borrower").val() == '') {
+            alert("尚有資料未填寫")
+        } else {
+            if (confirm("是否確定修改?")) {
+                alert("謝謝您!")
+            }
+        }
+    });
+
+
+
+    $("#btn_delete").click(function (e) {
+        e.preventDefault();
+        //var tr = $(this).closest('tr');
+        if (confirm("請問是否確定要刪除")) {
+            $.ajax({
+                type: "POST",
+                url: "/Book/DeleteBook",
+                data: "book_Id=" + @Model.book_Id,
+                dataType: "json",
+                success: function (response) {
+                    alert("已成功刪除");
+                    window.location.replace("/Book/SearchBook");
+                }, error: function (error) {
+                    alert("系統發生錯誤");
+                }
+            });
+        }
+        return false;
+    });
+
+</script>

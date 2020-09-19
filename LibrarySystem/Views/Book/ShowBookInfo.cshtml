@@ -1,0 +1,83 @@
+﻿@model LibrarySystem.Models.Book
+
+@{
+    ViewBag.Title = "ShowBookInfo";
+}
+
+<h2>書籍資訊</h2>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <table class="table table-bordered table-striped" style="width:800px">
+
+
+        <tbody>
+            <tr>
+
+                <td>書名</td>
+                <td>@Model.book_Name</td>
+
+            </tr>
+
+            <tr>
+
+                <td>作者</td>
+                <td>@Model.book_Author</td>
+
+            </tr>
+            <tr>
+
+                <td>出版商</td>
+                <td>@Model.book_Publisher</td>
+
+            </tr>
+            <tr>
+
+                <td>內容簡介</td>
+                <td>@Model.book_Content</td>
+
+            </tr>
+            <tr>
+
+                <td>購書日期</td>
+                <td>@Model.book_BoughtDate.ToString("yyyy/MM/dd")</td>
+
+            </tr>
+            <tr>
+
+                <td>圖書類別</td>
+                <td>@Model.book_TypeName</td>
+
+            </tr>
+
+            <tr>
+
+                <td>借閱狀態</td>
+                <td>@Model.book_Status_Name</td>
+
+            </tr>
+
+            <tr>
+
+                <td>借閱人</td>
+                <td>@Model.book_Borrower_Name</td>
+
+            </tr>
+        </tbody>
+
+    </table>
+
+
+
+
+
+
+
+}
+
+<div>
+    @Html.ActionLink("返回搜尋頁面", "SearchBook", "Book")
+</div>
